@@ -34,8 +34,8 @@ jobs:
       - name: Run lint
         run: npm run lint
 
-      - name: Run Formatter
-        run: npx prettier ––write .
+      # - name: Run Formatter
+      #   run: npx prettier ––write .
     
         
       - name: Run Tests
