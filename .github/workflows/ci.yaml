@@ -1,0 +1,46 @@
+name: CI Pipeline
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+    branches: [main]
+
+env:
+  NODE_VERSION: 15.x
+  APP_DIR: codebase/rdicidr-0.1.0
+
+jobs:
+  validate_code:
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: ${{env.APP_DIR}}
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{env.NODE_VERSION}}
+        
+      - name: Install Dependencies
+        run: npm install
+        working-directory: ${{env.APP_DIR}}
+
+      - name: Run lint
+        run: npm run lint
+
+      - name: Run Formatter
+        run: npm run prettier ––write
+    
+        
+      - name: Run Tests
+        run: CI=true npm run test
+
+      - name: Run Build
+        run: npm run build
+
